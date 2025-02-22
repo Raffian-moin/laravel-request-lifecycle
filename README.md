@@ -1,5 +1,16 @@
 # Laravel Request Lifecycle
 
+## Table of Contents
+- [What is Laravel?](#what-is-laravel)
+- [Does Laravel Restrict Developers to Follow the MVC Pattern?](#does-laravel-restrict-developers-to-follow-the-mvc-pattern)
+- [What is the Entry Point of a Laravel Application?](#what-is-the-entry-point-of-a-laravel-application)
+- [How Does Laravel Handle Routes Without .php Extensions?](#how-does-laravel-handle-routes-without-php-extensions)
+- [What is the First Thing That Laravel Does Internally?](#what-is-the-first-thing-that-laravel-does-internally)
+- [Laravel File Structure](#laravel-file-structure)
+  - [Application Development Framework Structure](#application-development-framework-structure)
+  - [Core Framework Structure](#core-framework-structure)
+- [Does Laravel uses application development configs or framework configs for configuration of the application?](#does-laravel-uses-application-development-configs-or-framework-configs-for-configuration-of-the-application)
+
 ## What is Laravel?
 Laravel is a popular open-source PHP MVC framework created by Taylor Otwell.
 
@@ -49,4 +60,13 @@ Laravel's core framework resides in the `vendor/laravel/framework` directory and
 - **`src/Illuminate/Database/`** – Handles ORM (Eloquent), migrations, and query builder.
 - **`src/Illuminate/Http/`** – Processes HTTP requests and responses.
 - **`src/Illuminate/Support/`** – Provides helper functions and utilities.
+
+### Does Laravel uses application development configs or framework configs for configuration of the application?
+
+Laravel uses both application-specific and framework-level configuration files. Your application’s configuration files reside in the `config` directory, while the framework’s default configurations are in the `vendor/laravel/framework/config` directory.
+
+These configurations are merged during the bootstrap process by the `LoadConfiguration` class located at `vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php`, ensuring that your application settings override the framework defaults.
+
+![Configuration Merge Method](/assets/configuration_merge_method.png)
+
 
