@@ -16,6 +16,11 @@ Laravel is a popular open-source PHP MVC framework created by Taylor Otwell.
 
 ## Does Laravel Restrict Developers to Follow the MVC (Model-View-Controller) Pattern?
 No, Laravel does not strictly enforce the MVC pattern. Developers can build applications using different architectural approaches if needed.
+For example, you can write code that bypasses the use of controllers or models entirely. However, for larger, maintainable, and scalable applications, following the MVC pattern generally helps in organizing your code and separating concerns.
+
+![Don't Need MVC Pattern](/assets/dont_need_mvc_pattern_image.png)
+
+In this example, the code directly handles data without interacting with a controller or using a model to retrieve data from the database. Although this approach can work for small projects or quick prototypes, it might lead to challenges as the application grows in complexity.
 
 ## What is the Entry Point of a Laravel Application?
 The entry point of a Laravel application is the `public/index.php` file. This file initializes the application, loads configurations, and handles incoming requests.
@@ -61,7 +66,13 @@ Laravel's core framework resides in the `vendor/laravel/framework` directory and
 - **`src/Illuminate/Http/`** – Processes HTTP requests and responses.
 - **`src/Illuminate/Support/`** – Provides helper functions and utilities.
 
-### Does Laravel uses application development configs or framework configs for configuration of the application?
+## What is service container?
+
+Imagine you need a variety of groceries—vegetables, meat, and other essentials—for your home. Instead of buying each item from different specialized shops, you prefer the convenience of a super shop that has everything under one roof.
+
+In Laravel, core services such as session, cookie, and database are like those groceries. The service container in Laravel acts as your super shop. When you request a service, the container doesn’t provide you with a raw, unprocessed component (like a live cow when you need meat); instead, it automatically resolves all of the service’s dependencies and returns a fully constructed, ready-to-use instance. This streamlined process simplifies dependency management and ensures that every service you work with is properly configured and ready for immediate use.
+
+## Does Laravel use application development configs or framework configs for configuration of the application?
 
 Laravel uses both application-specific and framework-level configuration files. Your application’s configuration files reside in the `config` directory, while the framework’s default configurations are in the `vendor/laravel/framework/config` directory.
 
