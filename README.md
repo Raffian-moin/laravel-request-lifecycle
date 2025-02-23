@@ -9,6 +9,7 @@
 - [Laravel File Structure](#laravel-file-structure)
   - [Application Development Framework Structure](#application-development-framework-structure)
   - [Core Framework Structure](#core-framework-structure)
+- [What is service container?](#what-is-service-container)
 - [Does Laravel uses application development configs or framework configs for configuration of the application?](#does-laravel-uses-application-development-configs-or-framework-configs-for-configuration-of-the-application)
 
 ## What is Laravel?
@@ -18,12 +19,26 @@ Laravel is a popular open-source PHP MVC framework created by Taylor Otwell.
 No, Laravel does not strictly enforce the MVC pattern. Developers can build applications using different architectural approaches if needed.
 For example, you can write code that bypasses the use of controllers or models entirely. However, for larger, maintainable, and scalable applications, following the MVC pattern generally helps in organizing your code and separating concerns.
 
-![Don't Need MVC Pattern](/assets/dont_need_mvc_pattern_image.png)
+```php
+Route::get('/users-list', function () {
+    $users = DB::table("users")->get();
+    return view('users-list', compact("users"));
+});
+```
 
 In this example, the code directly handles data without interacting with a controller or using a model to retrieve data from the database. Although this approach can work for small projects or quick prototypes, it might lead to challenges as the application grows in complexity.
 
 ## What is the Entry Point of a Laravel Application?
-The entry point of a Laravel application is the `public/index.php` file. This file initializes the application, loads configurations, and handles incoming requests.
+
+The entry point for a Laravel application depends on the type of request:
+
+- **Web Requests:**
+  The `public/index.php` file is the entry point. It loads the Composer autoloader, bootstraps the framework, loads the necessary configuration, and handles incoming HTTP requests.
+
+- **Console Requests:**
+  The `artisan` file, located in the root directory of the application, serves as the entry point for console commands. It initializes the application for command-line operations.
+
+This design allows Laravel to properly initialize and manage the application context whether it’s handling a web request or a console command.
 
 ## How Does Laravel Handle Routes Without .php Extensions?
 In traditional PHP applications, URLs map directly to `.php` files (e.g., `example.com/home.php`). Laravel, however, uses a routing system that maps URLs to controller methods or closure functions.
@@ -78,6 +93,41 @@ Laravel uses both application-specific and framework-level configuration files. 
 
 These configurations are merged during the bootstrap process by the `LoadConfiguration` class located at `vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php`, ensuring that your application settings override the framework defaults.
 
-![Configuration Merge Method](/assets/configuration_merge_method.png)
+```php
+/**
+     * Load the configuration items from all of the files.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Illuminate\Contracts\Config\Repository  $repository
+     * @return void
+     *
+     * @throws \Exception
+     */
+    protected function loadConfigurationFiles(Application $app, RepositoryContract $repository)
+    {
+        $files = $this->getConfigurationFiles($app);
+
+        $shouldMerge = method_exists($app, 'shouldMergeFrameworkConfiguration')
+            ? $app->shouldMergeFrameworkConfiguration()
+            : true;
+
+        $base = $shouldMerge
+            ? $this->getBaseConfiguration()
+            : [];
+
+
+        foreach (array_diff(array_keys($base), array_keys($files)) as $name => $config) {
+            $repository->set($name, $config);
+        }
+
+        foreach ($files as $name => $path) {
+            $base = $this->loadConfigurationFile($repository, $name, $path, $base);
+        }
+
+        foreach ($base as $name => $config) {
+            $repository->set($name, $config);
+        }
+    }
+```
 
 
